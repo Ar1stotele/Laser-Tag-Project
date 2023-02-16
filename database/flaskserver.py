@@ -20,7 +20,7 @@ data = {
 
 @app.route("/addPlayer")
 def insertPlayer():
-	supabase.table('Players').insert(data).execute()
+	##supabase.table('Players').insert(data).execute()
 	print(supabase.table('Players').select('*').execute().data)
 	return "addedPlayer: " + str(data['PlayerID'])
 

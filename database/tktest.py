@@ -9,7 +9,7 @@ from PIL import ImageTk, Image
 root = tk.Tk()
 
 
-#Creates a single player entry box 
+#Creates a single player entry box
 class playerEntry:
 
 	def __init__(self, container):
@@ -79,6 +79,13 @@ def show_splash_screen():
 		
 	# to hide menu during splash screen
 	root.overrideredirect(True)
+	
+	splash_screen_image_open = Image.open("../assets/logo.jpg")
+	splash_screen_image_resized = splash_screen_image_open.resize((1000,800), Image.LANCZOS)
+	splash_screen_image = ImageTk.PhotoImage(splash_screen_image_resized)
+
+	my_label = tk.Label(image=splash_screen_image)
+	my_label.grid(column=0, row=0)
 
 def main_window():
     # destroying splash screen
@@ -112,7 +119,7 @@ def main_window():
 
 
 show_splash_screen()
-root.after(300, main_window)
+root.after(3000, main_window)
 
 
 tk.mainloop()

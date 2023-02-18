@@ -1,37 +1,44 @@
-#pip install psycopg2 first
-import psycopg2
-
-class Database:
-    def __init__(self):
-        self.conn = psycopg2.connect('')
-
-    def connect(self):
-        # Contains the database info, and attempts to connect to Supabase.
-        # Needs Supabase info
-        DB_NAME = ""
-        DB_USER = ""
-        DB_PASS = ""
-        DB_HOST = ""
-        DB_PORT = ""
+from supabase import create_client, Client
+import supabase
+import json
+supabase: supabase = create_client("https://uijrqelihosqdealglud.supabase.co", "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InVpanJxZWxpaG9zcWRlYWxnbHVkIiwicm9sZSI6ImFub24iLCJpYXQiOjE2NzU4MDA1NjYsImV4cCI6MTk5MTM3NjU2Nn0.3m6URnm6uwpDxf-i-ucElMpzTfC4IHAiY-dGwgQisfQ")
 
 
-        try:
-            self.conn = psycopg2.connect(database = DB_NAME, user = DB_USER,
-                                    password = DB_PASS, host = DB_HOST,
-                                    port = DB_PORT)
-            print("Database connected successfully.")
-        except:
-            print("Error: Database not connected.")
+#Insert a player into a database
+def getPlayerID(PlayerID):
+	
+	#See if the player already exists, if not, insert a new player into the database
+	if(checkPlayer(PlayerID)):
+		return True
+	else:
+		data = {
+		"PlayerID": PlayerID,
+		"Codename" : "null"
+		}
+		supabase.table('Players').insert(data).execute()
+		print("Added player id to database")
+		return False
 
-    def create_table(self):
-        # Unfinished, I don't think this will create a working table.
-        cur = self.conn.cursor()
-        cur.execute ("""
+#Check if player already exists
+def checkPlayer(PlayerID):
 
-        CREATE TABLE Player
+	dict = supabase.table('Players').select('*').eq("PlayerID", PlayerID).execute().data
+	
+	if(dict):
+		print("Player already exists with this player ID")
+		return True
+	else:
+		return False
+		
 
-        """)
-    
-    def add_player (self, player_add):
-        # Unfinished. player_add needs to be added to the table properly.
-        pass
+#Return the codename of the player using the player ID
+def getCodename(PlayerID):
+
+	dict = supabase.table('Players').select('*').eq("PlayerID", PlayerID).execute().data
+	dict = dict[0]
+	return dict["Codename"]
+
+
+def insertCodename(PlayerID):
+	return "Codename"
+

@@ -39,6 +39,7 @@ def getCodename(PlayerID):
 	return dict["Codename"]
 
 
-def insertCodename(PlayerID):
-	return "Codename"
+def insertCodename(PlayerID, Codename):
+	supabase.table('Players').update({"Codename": Codename}).eq("PlayerID", PlayerID).execute()
+	print("Updated Codename")
 

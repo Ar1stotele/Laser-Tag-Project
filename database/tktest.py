@@ -99,18 +99,23 @@ def main_window():
 	main_root.title("Player Entry")
 	main_root.geometry("900x800")
 	
-	
+	#Frames for holding teams
 	team1_container=Frame(main_root, relief="sunken", borderwidth=2)
 	team1_container.pack(side="left", fill="x")
 	
 	team2_container=Frame(main_root, relief="sunken", borderwidth=2)
-	team2_container.pack(side="left", fill="x")
+	team2_container.pack(side="right", fill="x")
 	
+	#Team titles
 	team1Label = Label(team1_container, text="Red Team", bg = "Red")
 	team2Label = Label(team2_container, text="Green Team", bg = "Green")
 	
 	team1Label.pack(side = "top")
 	team2Label.pack(side = "top")
+	
+	startButton = Button(main_root, text = "Start", width = 400).pack()
+	#startButton.pack(side = "top")
+	
 	
 	#create 10 players for each team
 	

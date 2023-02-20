@@ -22,3 +22,9 @@ Requirements for software:
 	- Individual scores will be constantly updating
 	- High team score will be flashing during play
 	- During gameplay a random mp3 music file will be playing (files provided by instructor)
+
+
+Direction for adding new players:
+- The screen is divided into two halves for teams, each with individual lines for player entry
+- Add an ID to a line on the desired team's side, and press the arrow button to the side of the space. If a player with that ID exists, their codename will be automatically added to the codename space next to the ID
+- If a player with the submitted ID does not exist yet, you will be able to add a new codename in the provided space. Pressing the array next to the codename will then add that player to the team's roster.

@@ -1,7 +1,7 @@
-from supabase import create_client, Client
+from supabase import create_client
 import supabase
-import json
-supabase: supabase = create_client("https://uijrqelihosqdealglud.supabase.co", "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InVpanJxZWxpaG9zcWRlYWxnbHVkIiwicm9sZSI6ImFub24iLCJpYXQiOjE2NzU4MDA1NjYsImV4cCI6MTk5MTM3NjU2Nn0.3m6URnm6uwpDxf-i-ucElMpzTfC4IHAiY-dGwgQisfQ")
+import constants as config
+supabase: supabase = create_client(config.superbase_public_key, config.superbase_private_key)
 
 
 #Insert a player into a database

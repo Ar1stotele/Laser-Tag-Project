@@ -3,6 +3,7 @@ import database
 import tkinter as tk
 from tkinter import *
 from PIL import ImageTk, Image
+import constants as config
 
 
 ##TkInter's instance 
@@ -76,7 +77,7 @@ class playerEntry:
 def show_splash_screen():
 	global splash_screen_image
 	# define title of the application
-	root.title("Splash")
+	root.title(config.screen_name_splash)
 	# define size of the window -> in the future add autoamatic adjustment to the user resolution
 	root.geometry("1000x800")
 		
@@ -96,7 +97,7 @@ def main_window():
 
     # creating main screen
 	main_root = tk.Tk()
-	main_root.title("Player Entry")
+	main_root.title(config.screen_name_player)
 	main_root.geometry("900x800")
 	
 	#Frames for holding teams
@@ -124,11 +125,6 @@ def main_window():
 	
 	for x in range(19):
 		team2 = playerEntry(team2_container, x+1)
-	
-
-
-	
-
 	
 
 

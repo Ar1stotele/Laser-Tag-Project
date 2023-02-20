@@ -3,6 +3,8 @@ The main software for a laser tag system
 
 ---
 
+Run "python tktest.py" to run the program.
+
 Requirements for software:
 	- Needs to interface with a postgresql database
 	- Can use more than one window

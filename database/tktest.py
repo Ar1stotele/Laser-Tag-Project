@@ -12,13 +12,16 @@ root = tk.Tk()
 #Creates a single player entry box
 class playerEntry:
 
-	def __init__(self, container):
+	def __init__(self, container, playernum):
 	
 		self.PlayerID = None
 		self.Codename = None
 		
 		self.frame = Frame(container, relief="sunken", borderwidth=2)
 		self.frame.pack(side = "top")
+		
+		self.P1 = Label(self.frame, text=playernum)
+		self.P1.pack(side = "left")
 		
 		self.L1 = Label(self.frame, text="Player ID:")
 		self.L1.pack(side = "left")
@@ -73,7 +76,7 @@ class playerEntry:
 def show_splash_screen():
 	global splash_screen_image
 	# define title of the application
-	root.title("test")
+	root.title("Splash")
 	# define size of the window -> in the future add autoamatic adjustment to the user resolution
 	root.geometry("1000x800")
 		
@@ -93,8 +96,8 @@ def main_window():
 
     # creating main screen
 	main_root = tk.Tk()
-	main_root.title("test application")
-	main_root.geometry("850x800")
+	main_root.title("Player Entry")
+	main_root.geometry("900x800")
 	
 	
 	team1_container=Frame(main_root, relief="sunken", borderwidth=2)
@@ -103,13 +106,19 @@ def main_window():
 	team2_container=Frame(main_root, relief="sunken", borderwidth=2)
 	team2_container.pack(side="left", fill="x")
 	
+	team1Label = Label(team1_container, text="Red Team", bg = "Red")
+	team2Label = Label(team2_container, text="Green Team", bg = "Green")
+	
+	team1Label.pack(side = "top")
+	team2Label.pack(side = "top")
+	
 	#create 10 players for each team
 	
-	for x in range(10):
-		team1 = playerEntry(team1_container)
+	for x in range(19):
+		team1 = playerEntry(team1_container, x+1)
 	
-	for x in range(10):
-		team2 = playerEntry(team2_container)
+	for x in range(19):
+		team2 = playerEntry(team2_container, x+1)
 	
 
 

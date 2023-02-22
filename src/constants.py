@@ -1,14 +1,14 @@
 from dotenv import dotenv_values
 
-config = dotenv_values("../.env")
+CONFIG = dotenv_values("../.env")
 
-server_ip = config.get('SERVER_IP')
-port = config.get('PORT')
-superbase_public_key = config.get('SUPERBASE_PUBLIC_KEY')
-superbase_private_key = config.get('SUPERBASE_PRIVATE_KEY')
-screen_name_splash = "Splash Screen"
-screen_name_player = "Player Entry"
+SERVER_IP = CONFIG.get('SERVER_IP')
+PORT = CONFIG.get('PORT')
+SUPERBASE_PUBLIC_KEY = CONFIG.get('SUPERBASE_PUBLIC_KEY')
+SUPERBASE_PRIVATE_KEY = CONFIG.get('SUPERBASE_PRIVATE_KEY')
+SCREEN_NAME_SPLASH = "Splash Screen"
+SCREEN_NAME_PLAYER = "Player Entry"
 
-print(server_ip)
+print(SERVER_IP)
 
-application_title = "Laser Tag"
+APPLICATION_TITLE = "Laser Tag"

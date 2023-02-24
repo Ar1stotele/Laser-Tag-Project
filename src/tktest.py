@@ -74,62 +74,60 @@ class playerEntry:
 		database.insertCodename(self.PlayerID, self.Codename)
 	
 
-def show_splash_screen():
-	global splash_screen_image
-	# define title of the application
-	root.title(config.screen_name_splash)
-	# define size of the window -> in the future add autoamatic adjustment to the user resolution
-	root.geometry("1000x800")
+class GUI:
+
+	def __init__(self):
+		self.splash_screen_image = None
+		self.splash_screen_address = "../assets/logo.jpg"
+
+	def set_splash_screen_image(self):
+		# Opens and resizes the image.
+		splash_screen_open = Image.open(self.splash_screen_address)
+		splash_screen_resized = splash_screen_open.resize((1000,800), Image.LANCZOS)
+		self.splash_screen_image = ImageTk.PhotoImage(splash_screen_resized)
+
+	def show_splash_screen(self):
+		#global splash_screen_image #needs to be handled by a class
+		# define title of the application
+		root.title(config.SCREEN_NAME_SPLASH)
+		# define size of the window -> in the future add autoamatic adjustment to the user resolution
+		root.geometry("1000x800")
+			
+		# to hide menu during splash screen
+		root.overrideredirect(True)
 		
-	# to hide menu during splash screen
-	root.overrideredirect(True)
-	
-	splash_screen_image_open = Image.open("../assets/logo.jpg")
-	splash_screen_image_resized = splash_screen_image_open.resize((1000,800), Image.LANCZOS)
-	splash_screen_image = ImageTk.PhotoImage(splash_screen_image_resized)
+		self.set_splash_screen_image()
 
-	my_label = tk.Label(image=splash_screen_image)
-	my_label.grid(column=0, row=0)
+		# Creates a label with the splash screen image on it and aligns it.
+		label_splash_screen = tk.Label(image=self.splash_screen_image)
+		label_splash_screen.grid(column=0, row=0)
 
-def main_window():
-    # destroying splash screen
-	root.destroy()
+	def main_window(self):
+		# destroying splash screen
+		root.destroy()
 
-    # creating main screen
-	main_root = tk.Tk()
-	main_root.title(config.screen_name_player)
-	main_root.geometry("900x800")
-	
-	#Frames for holding teams
-	team1_container=Frame(main_root, relief="sunken", borderwidth=2)
-	team1_container.pack(side="left", fill="x")
-	
-	team2_container=Frame(main_root, relief="sunken", borderwidth=2)
-	team2_container.pack(side="right", fill="x")
-	
-	#Team titles
-	team1Label = Label(team1_container, text="Red Team", bg = "Red")
-	team2Label = Label(team2_container, text="Green Team", bg = "Green")
-	
-	team1Label.pack(side = "top")
-	team2Label.pack(side = "top")
-	
-	startButton = Button(main_root, text = "Start", width = 400).pack()
-	#startButton.pack(side = "top")
-	
-	
-	#create 10 players for each team
-	
-	for x in range(19):
-		team1 = playerEntry(team1_container, x+1)
-	
-	for x in range(19):
-		team2 = playerEntry(team2_container, x+1)
-	
-
-
-show_splash_screen()
-root.after(3000, main_window)
-
-
-tk.mainloop()
+		# creating main screen
+		main_root = tk.Tk()
+		main_root.title(config.SCREEN_NAME_PLAYER)
+		main_root.geometry("900x800")
+		
+		#Frames for holding teams
+		team1_container=Frame(main_root, relief="sunken", borderwidth=2)
+		team1_container.pack(side="left", fill="x")
+		
+		team2_container=Frame(main_root, relief="sunken", borderwidth=2)
+		team2_container.pack(side="right", fill="x")
+		
+		#Team titles
+		team1Label = Label(team1_container, text="Red Team", bg = "Red")
+		team2Label = Label(team2_container, text="Green Team", bg = "Green")
+		
+		team1Label.pack(side = "top")
+		team2Label.pack(side = "top")
+		
+		
+		#create 19 players for each team
+		
+		for x in range(19):
+			playerEntry(team1_container, x+1)
+			playerEntry(team2_container, x+1)

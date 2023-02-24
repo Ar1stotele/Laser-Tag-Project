@@ -1,7 +1,7 @@
 from supabase import create_client
 import supabase
 import constants as config
-supabase: supabase = create_client(config.superbase_public_key, config.superbase_private_key)
+supabase: supabase = create_client(config.SUPERBASE_PUBLIC_KEY, config.SUPERBASE_PRIVATE_KEY)
 
 
 #Insert a player into a database

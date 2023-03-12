@@ -9,6 +9,35 @@ import constants as config
 ##TkInter's instance 
 root = tk.Tk()
 
+def new_window(self):
+  #open a new window for play action screen and begin display pregame countdown
+  self.play_action = tk.Tk()
+  self.play_action.title("Play Action")
+  self.play_action.geometry("900x800")
+
+
+
+	#Frames for holding teams
+  team1_container=Frame(self.play_action, relief="sunken", borderwidth=2)
+  team1_container.pack(side="left", fill="x")
+
+  team2_container=Frame(self.play_action, relief="sunken", borderwidth=2)
+  team2_container.pack(side="right", fill="x")
+
+
+
+	#Team titles
+  team1Label = Label(team1_container, text="Red Team", bg = "Red")
+  team2Label = Label(team2_container, text="Green Team", bg = "Green")
+
+  team1Label.pack(side = "top")
+  team2Label.pack(side = "top")
+
+  for x in range(19):
+			playerEntry	(team1_container, x+1)
+			playerEntry(team2_container, x+1)
+
+    
 
 #Creates a single player entry box
 class playerEntry:
@@ -41,6 +70,11 @@ class playerEntry:
 		
 		self.L2 = Label(self.frame, text="Codename:")
 		self.L2.pack(side = "right")
+
+
+
+
+		
 		
 		
 	
@@ -117,6 +151,10 @@ class GUI:
 		
 		team2_container=Frame(main_root, relief="sunken", borderwidth=2)
 		team2_container.pack(side="right", fill="x")
+
+		play_button = Button(main_root, relief = "sunken", borderwidth=2, text="Lock in Teams", command = lambda: new_window(self))
+		play_button.pack(side="top", pady= 40)
+
 		
 		#Team titles
 		team1Label = Label(team1_container, text="Red Team", bg = "Red")

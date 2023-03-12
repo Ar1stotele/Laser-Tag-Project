@@ -1,6 +1,6 @@
 from dotenv import dotenv_values
 
-CONFIG = dotenv_values("./.env")
+CONFIG = dotenv_values("../.env")
 
 SERVER_IP = CONFIG.get('SERVER_IP')
 PORT = CONFIG.get('PORT')

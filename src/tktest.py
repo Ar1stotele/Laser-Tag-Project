@@ -56,22 +56,25 @@ class playerEntry:
 		
 		#If player already exists in database, get the codename
 		#If the player does not exist, player ID is added to the database 
-		if(database.getPlayerID(self.PlayerID)):
+		if(database.check_player(self.PlayerID)):
 			
 			#Disable the entry and button, add the codename into the entry
-			self.Codename = database.getCodename(self.PlayerID)
+			self.Codename = database.get_codename(self.PlayerID)
 			
 			#Disable entering a codename, as this is fetched from database
 			self.E2.insert(0, self.Codename)
 			
 			self.E2.config(state = "disabled")
 			self.B2.config(state = "disabled")
+		else:
+			database.insert_player_id(self.PlayerID)
 
 	def newCodename(self):
 		self.Codename = self.E2.get()
 		self.E2.config(state = "disabled")
 		#Update the codename of the corresponding id in the database
-		database.insertCodename(self.PlayerID, self.Codename)
+		if(database.insert_player_id(self.PlayerID)):
+			database.insert_codename(self.PlayerID, self.Codename)
 	
 
 class GUI:

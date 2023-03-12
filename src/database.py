@@ -3,43 +3,39 @@ import supabase
 import constants as config
 supabase: supabase = create_client(config.SUPERBASE_PUBLIC_KEY, config.SUPERBASE_PRIVATE_KEY)
 
+#Check if player already exists
+def check_player(PlayerID):
+
+	player = supabase.table('Players').select('*').eq("PlayerID", PlayerID).execute().data
+	
+	if(player):
+		print("Player exists with this player ID")
+		return True
+	else:
+		return False
 
 #Insert a player into a database
-def getPlayerID(PlayerID):
-	
-	#See if the player already exists, if not, insert a new player into the database
-	if(checkPlayer(PlayerID)):
-		return True
-	else:
-		data = {
+def insert_player_id(PlayerID):
+
+	data = {
 		"PlayerID": PlayerID,
 		"Codename" : "null"
-		}
-		supabase.table('Players').insert(data).execute()
-		print("Added player id to database")
-		return False
-
-#Check if player already exists
-def checkPlayer(PlayerID):
-
-	dict = supabase.table('Players').select('*').eq("PlayerID", PlayerID).execute().data
+	}
 	
-	if(dict):
-		print("Player already exists with this player ID")
-		return True
-	else:
-		return False
-		
+	supabase.table('Players').insert(data).execute()
+	print("Added player id to database")
+
+
 
 #Return the codename of the player using the player ID
-def getCodename(PlayerID):
+def get_codename(PlayerID):
 
-	dict = supabase.table('Players').select('*').eq("PlayerID", PlayerID).execute().data
-	dict = dict[0]
-	return dict["Codename"]
+	player = supabase.table('Players').select('*').eq("PlayerID", PlayerID).execute().data
+	codename_to_get = player[0]
+	return codename_to_get["Codename"]
 
 
-def insertCodename(PlayerID, Codename):
+def insert_codename(PlayerID, Codename):
 	supabase.table('Players').update({"Codename": Codename}).eq("PlayerID", PlayerID).execute()
 	print("Updated Codename")
 

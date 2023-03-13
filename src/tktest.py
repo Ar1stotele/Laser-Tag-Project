@@ -225,11 +225,10 @@ class GUI:
 		play_button.pack(side="bottom", pady= 0, padx= 0)
 
 	def startGameShortcut(self, event):
-		print(event)
 		if event.keysym == "F5" and event.state == 0:
 			self.player_entry_root.destroy()
 			CountdownScreen()
-		elif event.keysym == "F5" and event.keycode==116:
+		elif event.keysym == "F5":
 			self.player_entry_root.destroy()
 			CountdownScreen()
 			

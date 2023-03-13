@@ -152,8 +152,7 @@ class GUI:
 	def __init__(self):
 		self.splash_screen_image = None
 		self.splash_screen_address = "../assets/logo.jpg"
-
-		
+		self.player_entry_root.bind("<KeyPress>", self.startGameShortcut)
 
 	def set_splash_screen_image(self):
 		# Opens and resizes the image.
@@ -197,4 +196,6 @@ class GUI:
 		play_button = Button(self.player_entry_root, relief = "sunken", borderwidth=2, text="Lock in Teams", command = lambda: Player_action_screen.new_window(Player_action_screen))
 		play_button.pack(side="top", pady= 40)
 
-
+	def startGameShortcut(self, event):
+		if event.keysym == "F5" and event.state == 0:
+			Player_action_screen.new_window(Player_action_screen)

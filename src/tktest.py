@@ -54,14 +54,21 @@ class Player_action_screen:
 		#open a new window for play action screen and begin display pregame countdown
 		self.play_action = tk.Tk()
 		self.play_action.title("Play Action")
-		self.play_action.geometry("900x800")
+		self.play_action.geometry("400x400")
+		timer_frame = Frame(self.play_action,relief="sunken", borderwidth=2)
+		timer_frame.pack(side = "top",pady = 40)
 
-		left_frame = Frame(self.play_action)
-		left_frame.pack(side = "left")
-		right_frame = Frame(self.play_action)
-		right_frame.pack(side = "right")
-		timer_frame = Frame(self.play_action)
-		timer_frame.pack(side = "top")
+		big_frame = Frame(self.play_action, relief="sunken", borderwidth = 2)
+		big_frame.pack(side = "bottom", pady = 50)
+
+		left_frame = Frame(big_frame,relief="sunken", borderwidth=2)
+		left_frame.pack(side = "left", padx = 40)
+		right_frame = Frame(big_frame,relief="sunken", borderwidth=2)
+		right_frame.pack(side = "right", padx = 40)
+		green_team = Label(left_frame, text = "Green Team", bg = "green")
+		green_team.pack()
+		red_team = Label(right_frame, text = "Red Team", bg = "red")
+		red_team.pack() 
 		
 		for x in self.red_dict:
 			red_label = Label(left_frame, text = x)
@@ -81,8 +88,6 @@ class Player_action_screen:
 			count-=1
 			if count>=0:
 				timerLabel.after(1000,countdown,count)
-
-		
 		time_left = 360
 		countdown(time_left)
 		
@@ -220,6 +225,12 @@ class GUI:
 		play_button.pack(side="bottom", pady= 0, padx= 0)
 
 	def startGameShortcut(self, event):
+		print(event)
 		if event.keysym == "F5" and event.state == 0:
 			self.player_entry_root.destroy()
 			CountdownScreen()
+		elif event.keysym == "F5" and event.keycode==116:
+			self.player_entry_root.destroy()
+			CountdownScreen()
+			
+		

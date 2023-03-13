@@ -24,6 +24,7 @@ class Team:
 class CountdownScreen:
 	def __init__(self):
 		self.master = tk.Tk()
+		self.master.title = "Loading.."
 		self.master.geometry("900x800")
 		self.count = 30
 		self.timer_image_open = None

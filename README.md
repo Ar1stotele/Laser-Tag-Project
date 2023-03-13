@@ -3,6 +3,7 @@ The main software for a laser tag system
 
 ---
 How to run
+	- switch to the branch `sprint-3`
 	- create .env with appropriate data, .env file is pinned in Team 17 slack channel. Add this to the directory of the repo. 
 	- go to directory /src
 	- Run the following command "python "main.py"" to run the program.

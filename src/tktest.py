@@ -33,13 +33,36 @@ class Player_action_screen:
 		self.play_action = tk.Tk()
 		self.play_action.title("Play Action")
 		self.play_action.geometry("900x800")
+  
+		left_frame = Frame(self.play_action)
+		left_frame.pack(side = "left")
+		right_frame = Frame(self.play_action)
+		right_frame.pack(side = "right")
+		timer_frame = Frame(self.play_action)
+		timer_frame.pack(side = "top")
+  
+		for x in self.red_dict:
+			red_label = Label(left_frame, text = x)
+			red_label.pack()
+			pass
+		for y in self.green_dict:
+			green_label = Label(right_frame, text = y)
+			green_label.pack()
+			pass
+  
 
-		for x in range(len(self.red_dict)):
-			# Tkinter methods go here
-			pass
-		for x in range(len(self.red_dict)):
-			# Tkinter methods go here
-			pass
+		timerLabel = Label(timer_frame)
+		timerLabel.pack()
+  
+		def countdown(count):
+			timerLabel['text'] = f'Time left: {count} seconds'	
+			count-=1
+			if count>=0:
+				timerLabel.after(1000,countdown,count)
+		time_left = 360
+		countdown(time_left)
+		
+		
 
 	def add_active_player (self, team, codename):
 		if team.color == "Red":
@@ -107,14 +130,16 @@ class playerEntry:
 			self.E2.config(state = "disabled")
 			self.B2.config(state = "disabled")
 
-		print(self.Codename)
-		Player_action_screen.add_active_player(Player_action_screen ,self.team_to_use, self.Codename)
+			print(self.Codename)
+			Player_action_screen.add_active_player(Player_action_screen ,self.team_to_use, self.Codename)
 
 	def newCodename(self):
 		self.Codename = self.E2.get()
 		self.E2.config(state = "disabled")
 		#Update the codename of the corresponding id in the database
 		database.insertCodename(self.PlayerID, self.Codename)
+		Player_action_screen.add_active_player(Player_action_screen ,self.team_to_use, self.Codename)
+
 	
 
 

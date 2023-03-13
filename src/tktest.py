@@ -5,7 +5,6 @@ from tkinter import *
 from PIL import ImageTk, Image
 import constants as config
 
-
 ##TkInter's instance 
 root = tk.Tk()
 
@@ -17,12 +16,34 @@ class Team:
 		self.container = Frame(GUI.player_entry_root, relief="sunken", borderwidth=2)
 		self.container.pack(side="left", fill="x")
 		self.color = team_color
-
 		team_text = team_color + " Team"
-
 
 		self.label = Label(self.container, text=team_text, bg = team_color)
 		self.label.pack(side = "top")
+
+class CountdownScreen:
+	def __init__(self):
+		self.master = tk.Tk()
+		self.master.geometry("900x800")
+		self.count = 30
+		self.timer_image_open = None
+		self.timer_image_address = ""
+		self.start_countdown()
+        
+	def start_countdown(self):
+		if self.count > 0:
+			self.timer_image_address = f"../assets/countdown/{self.count}.tif"
+			self.count -= 1
+			timer_image_open = Image.open(self.timer_image_address)
+			timer_image_resized = timer_image_open.resize((900,800), Image.LANCZOS)
+			self.timer_image = ImageTk.PhotoImage(timer_image_resized)
+			label_timer_screen = tk.Label(image=self.timer_image)
+			label_timer_screen.place(x=0, y=0)
+			self.master.after(1000, self.start_countdown)
+		else:
+			self.master.destroy()
+			Player_action_screen.new_window(Player_action_screen)
+
 
 class Player_action_screen:
 	red_dict = {}
@@ -33,14 +54,14 @@ class Player_action_screen:
 		self.play_action = tk.Tk()
 		self.play_action.title("Play Action")
 		self.play_action.geometry("900x800")
-  
+
 		left_frame = Frame(self.play_action)
 		left_frame.pack(side = "left")
 		right_frame = Frame(self.play_action)
 		right_frame.pack(side = "right")
 		timer_frame = Frame(self.play_action)
 		timer_frame.pack(side = "top")
-  
+		
 		for x in self.red_dict:
 			red_label = Label(left_frame, text = x)
 			red_label.pack()
@@ -59,6 +80,8 @@ class Player_action_screen:
 			count-=1
 			if count>=0:
 				timerLabel.after(1000,countdown,count)
+
+		
 		time_left = 360
 		countdown(time_left)
 		
@@ -145,8 +168,6 @@ class playerEntry:
 
 
 class GUI:
-
-	
 	player_entry_root = tk.Tk()
 	
 	def __init__(self):
@@ -193,9 +214,10 @@ class GUI:
 			playerEntry(red_team, x+1)
 			playerEntry(green_team, x+1)
 
-		play_button = Button(self.player_entry_root, relief = "sunken", borderwidth=2, text="Lock in Teams", command = lambda: Player_action_screen.new_window(Player_action_screen))
+		play_button = Button(self.player_entry_root, relief = "sunken", borderwidth=2, text="Lock in Teams", command = lambda: CountdownScreen()
+)
 		play_button.pack(side="top", pady= 40)
 
 	def startGameShortcut(self, event):
 		if event.keysym == "F5" and event.state == 0:
-			Player_action_screen.new_window(Player_action_screen)
+			CountdownScreen()

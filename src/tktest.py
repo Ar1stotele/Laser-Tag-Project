@@ -215,9 +215,9 @@ class GUI:
 			playerEntry(green_team, x+1)
 
 		play_button = Button(self.player_entry_root, relief = "sunken", borderwidth=2, text="Lock in Teams", command = lambda: CountdownScreen()
-)
-		play_button.pack(side="top", pady= 40)
+		play_button.pack(side="bottom", pady= 0, padx= 50)
 
 	def startGameShortcut(self, event):
 		if event.keysym == "F5" and event.state == 0:
+			self.player_entry_root.destroy()
 			CountdownScreen()

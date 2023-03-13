@@ -10,15 +10,79 @@ import constants as config
 root = tk.Tk()
 
 
+
+
+class Team:
+	def __init__(self, team_color):
+		self.container = Frame(GUI.player_entry_root, relief="sunken", borderwidth=2)
+		self.container.pack(side="left", fill="x")
+		self.color = team_color
+
+		team_text = team_color + " Team"
+
+
+		self.label = Label(self.container, text=team_text, bg = team_color)
+		self.label.pack(side = "top")
+
+class Player_action_screen:
+	red_dict = {}
+	green_dict = {}
+
+	def new_window(self):
+		#open a new window for play action screen and begin display pregame countdown
+		self.play_action = tk.Tk()
+		self.play_action.title("Play Action")
+		self.play_action.geometry("900x800")
+  
+		left_frame = Frame(self.play_action)
+		left_frame.pack(side = "left")
+		right_frame = Frame(self.play_action)
+		right_frame.pack(side = "right")
+		timer_frame = Frame(self.play_action)
+		timer_frame.pack(side = "top")
+  
+		for x in self.red_dict:
+			red_label = Label(left_frame, text = x)
+			red_label.pack()
+			pass
+		for y in self.green_dict:
+			green_label = Label(right_frame, text = y)
+			green_label.pack()
+			pass
+  
+
+		timerLabel = Label(timer_frame)
+		timerLabel.pack()
+  
+		def countdown(count):
+			timerLabel['text'] = f'Time left: {count} seconds'	
+			count-=1
+			if count>=0:
+				timerLabel.after(1000,countdown,count)
+		time_left = 360
+		countdown(time_left)
+		
+		
+
+	def add_active_player (self, team, codename):
+		if team.color == "Red":
+			self.red_dict[codename] = 0
+		elif team.color == "Green":
+			self.green_dict[codename] = 0
+
+
+
 #Creates a single player entry box
 class playerEntry:
 
-	def __init__(self, container, playernum):
+	def __init__(self, team, playernum):
 	
 		self.PlayerID = None
 		self.Codename = None
+		self.team_to_use = team
+		container_to_use =  team.container
 		
-		self.frame = Frame(container, relief="sunken", borderwidth=2)
+		self.frame = Frame(container_to_use, relief="sunken", borderwidth=2)
 		self.frame.pack(side = "top")
 		
 		self.P1 = Label(self.frame, text=playernum)
@@ -41,8 +105,7 @@ class playerEntry:
 		
 		self.L2 = Label(self.frame, text="Codename:")
 		self.L2.pack(side = "right")
-		
-		
+
 	
 	def getPlayer(self):
 	
@@ -67,18 +130,29 @@ class playerEntry:
 			self.E2.config(state = "disabled")
 			self.B2.config(state = "disabled")
 
+			print(self.Codename)
+			Player_action_screen.add_active_player(Player_action_screen ,self.team_to_use, self.Codename)
+
 	def newCodename(self):
 		self.Codename = self.E2.get()
 		self.E2.config(state = "disabled")
 		#Update the codename of the corresponding id in the database
 		database.insertCodename(self.PlayerID, self.Codename)
+		Player_action_screen.add_active_player(Player_action_screen ,self.team_to_use, self.Codename)
+
 	
+
+
 
 class GUI:
 
+	
+	player_entry_root = tk.Tk()
+	
 	def __init__(self):
 		self.splash_screen_image = None
 		self.splash_screen_address = "../assets/logo.jpg"
+		self.player_entry_root.bind("<KeyPress>", self.startGameShortcut)
 
 	def set_splash_screen_image(self):
 		# Opens and resizes the image.
@@ -102,32 +176,26 @@ class GUI:
 		label_splash_screen = tk.Label(image=self.splash_screen_image)
 		label_splash_screen.grid(column=0, row=0)
 
-	def main_window(self):
+	def player_entry_window(self):
 		# destroying splash screen
 		root.destroy()
 
-		# creating main screen
-		main_root = tk.Tk()
-		main_root.title(config.SCREEN_NAME_PLAYER)
-		main_root.geometry("900x800")
-		
-		#Frames for holding teams
-		team1_container=Frame(main_root, relief="sunken", borderwidth=2)
-		team1_container.pack(side="left", fill="x")
-		
-		team2_container=Frame(main_root, relief="sunken", borderwidth=2)
-		team2_container.pack(side="right", fill="x")
-		
-		#Team titles
-		team1Label = Label(team1_container, text="Red Team", bg = "Red")
-		team2Label = Label(team2_container, text="Green Team", bg = "Green")
-		
-		team1Label.pack(side = "top")
-		team2Label.pack(side = "top")
-		
-		
+		# creating player_entry screen
+		self.player_entry_root.title(config.SCREEN_NAME_PLAYER)
+		self.player_entry_root.geometry("900x800")
+
+		# Create team object for each team.
+		red_team = Team("Red")
+		green_team = Team("Green")
+
 		#create 19 players for each team
-		
 		for x in range(19):
-			playerEntry(team1_container, x+1)
-			playerEntry(team2_container, x+1)
+			playerEntry(red_team, x+1)
+			playerEntry(green_team, x+1)
+
+		play_button = Button(self.player_entry_root, relief = "sunken", borderwidth=2, text="Lock in Teams", command = lambda: Player_action_screen.new_window(Player_action_screen))
+		play_button.pack(side="top", pady= 40)
+
+	def startGameShortcut(self, event):
+		if event.keysym == "F5" and event.state == 0:
+			Player_action_screen.new_window(Player_action_screen)

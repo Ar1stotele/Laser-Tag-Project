@@ -40,23 +40,38 @@ class CountdownScreen:
 			self.timer_image = ImageTk.PhotoImage(timer_image_resized)
 			label_timer_screen = tk.Label(image=self.timer_image)
 			label_timer_screen.place(x=0, y=0)
-			self.master.after(1000, self.start_countdown)
+			self.master.after(10, self.start_countdown)
+			#self.master.after(1000, self.start_countdown)
 		else:
 			self.master.destroy()
-			Player_action_screen.new_window(Player_action_screen)
+			Player_action_screen().new_window()
 
 
 class Player_action_screen:
 	red_dict = {}
 	green_dict = {}
 
-	def new_window(self):
-		#open a new window for play action screen and begin display pregame countdown
+	def __init__(self):
 		self.play_action = tk.Tk()
 		self.play_action.title("Play Action")
 		self.play_action.geometry("400x400")
-		timer_frame = Frame(self.play_action,relief="sunken", borderwidth=2)
-		timer_frame.pack(side = "top",pady = 40)
+		self.timer_frame = Frame(self.play_action,relief="sunken", borderwidth=2)
+		self.timer_frame.pack(side = "top",pady = 40)
+
+		self.timerLabel = Label(self.timer_frame)
+		self.timerLabel.pack()
+
+	def countdown(self,count):
+		
+
+		self.timerLabel['text'] = f'Time left: {count} seconds'	
+		count-=1
+		if count>=0:
+			self.timerLabel.after(1000,self.countdown,count)
+
+	def new_window(self):
+		#open a new window for play action screen and begin display pregame countdown
+		
 
 		big_frame = Frame(self.play_action, relief="sunken", borderwidth = 2)
 		big_frame.pack(side = "bottom", pady = 50)
@@ -73,23 +88,14 @@ class Player_action_screen:
 		for x in self.red_dict:
 			red_label = Label(left_frame, text = x)
 			red_label.pack()
-			pass
 		for y in self.green_dict:
 			green_label = Label(right_frame, text = y)
 			green_label.pack()
-			pass
-  
 
-		timerLabel = Label(timer_frame)
-		timerLabel.pack()
-  
-		def countdown(count):
-			timerLabel['text'] = f'Time left: {count} seconds'	
-			count-=1
-			if count>=0:
-				timerLabel.after(1000,countdown,count)
+		
+
 		time_left = 360
-		countdown(time_left)
+		self.countdown(time_left)
 		
 		
 

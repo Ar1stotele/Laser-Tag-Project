@@ -40,64 +40,74 @@ class CountdownScreen:
 			self.timer_image = ImageTk.PhotoImage(timer_image_resized)
 			label_timer_screen = tk.Label(image=self.timer_image)
 			label_timer_screen.place(x=0, y=0)
-			self.master.after(10, self.start_countdown)
-			#self.master.after(1000, self.start_countdown)
+			self.master.after(1000, self.start_countdown)
 		else:
 			self.master.destroy()
 			Player_action_screen().new_window()
 
 
 class Player_action_screen:
+	play_action = None
+	timer_label = None
+	
+	left_frame = None
+	right_frame = None
+
 	red_dict = {}
 	green_dict = {}
 
 	def __init__(self):
-		self.play_action = tk.Tk()
-		self.play_action.title("Play Action")
-		self.play_action.geometry("400x400")
-		self.timer_frame = Frame(self.play_action,relief="sunken", borderwidth=2)
-		self.timer_frame.pack(side = "top",pady = 40)
+		pass
 
-		self.timerLabel = Label(self.timer_frame)
-		self.timerLabel.pack()
+	def initialize_window(self):
+		#Makes the actual window
+		Player_action_screen.play_action = tk.Tk()
+		Player_action_screen.play_action.title("Play Action")
+		Player_action_screen.play_action.geometry("400x400")
 
-	def countdown(self,count):
-		
+		timer_frame = Frame(Player_action_screen.play_action,relief="sunken", borderwidth=2)
+		timer_frame.pack(side = "top",pady = 40)
 
-		self.timerLabel['text'] = f'Time left: {count} seconds'	
+		Player_action_screen.timer_label = Label(timer_frame)
+		Player_action_screen.timer_label.pack()
+
+
+	def set_left_frame(self):
+		Player_action_screen.left_frame = Frame(self.big_frame,relief="sunken", borderwidth=2)
+		Player_action_screen.left_frame.pack(side = "left", padx = 40)
+		red_team = Label(Player_action_screen.left_frame, text = "Red Team", bg = "red")
+		red_team.pack() 
+
+	def set_right_frame(self):
+		Player_action_screen.right_frame = Frame(self.big_frame,relief="sunken", borderwidth=2)
+		Player_action_screen.right_frame.pack(side = "right", padx = 40)
+		green_team = Label(Player_action_screen.right_frame, text = "Green Team", bg = "green")
+		green_team.pack()
+
+	def countdown(self, count):
+		Player_action_screen.timer_label['text'] = f'Time left: {count} seconds'	
 		count-=1
 		if count>=0:
-			self.timerLabel.after(1000,self.countdown,count)
+			Player_action_screen.timer_label.after(1000,self.countdown,count)
+
 
 	def new_window(self):
-		#open a new window for play action screen and begin display pregame countdown
-		
+		self.initialize_window()
 
-		big_frame = Frame(self.play_action, relief="sunken", borderwidth = 2)
-		big_frame.pack(side = "bottom", pady = 50)
+		self.big_frame = Frame(Player_action_screen.play_action, relief="sunken", borderwidth = 2)
+		self.big_frame.pack(side = "bottom", pady = 50)
 
-		left_frame = Frame(big_frame,relief="sunken", borderwidth=2)
-		left_frame.pack(side = "left", padx = 40)
-		right_frame = Frame(big_frame,relief="sunken", borderwidth=2)
-		right_frame.pack(side = "right", padx = 40)
-		green_team = Label(left_frame, text = "Green Team", bg = "green")
-		green_team.pack()
-		red_team = Label(right_frame, text = "Red Team", bg = "red")
-		red_team.pack() 
+		self.set_left_frame()
+		self.set_right_frame()
 		
 		for x in self.red_dict:
-			red_label = Label(left_frame, text = x)
+			red_label = Label(Player_action_screen.left_frame, text = x)
 			red_label.pack()
 		for y in self.green_dict:
-			green_label = Label(right_frame, text = y)
+			green_label = Label(Player_action_screen.right_frame, text = y)
 			green_label.pack()
 
-		
-
-		time_left = 360
-		self.countdown(time_left)
-		
-		
+		self.countdown(360)
 
 	def add_active_player (self, team, codename):
 		if team.color == "Red":
@@ -110,82 +120,100 @@ class Player_action_screen:
 #Creates a single player entry box
 class playerEntry:
 
+
+
+	def __set_frame(self):
+		#TODO: make priv variables
+		pass
+		self.frame = Frame(self.team.container, relief="sunken", borderwidth=2)
+		self.frame.pack(side = "top")
+		
+		#def create prompt labels
+		p_num_label = Label(self.frame, text=self.playernum)
+		p_num_label.pack(side = "left")
+
+	def __set_id_frame(self):
+		id_label = Label(self.frame, text="Player ID:")
+		id_label.pack(side = "left")
+		
+		self.id_entry = Entry(self.frame)
+		self.id_entry.pack(side = "left")
+
+		self.id_button = Button(self.frame, text = ">", command = self.get_player)
+		self.id_button.pack(side = "left")
+
+	def __set_codename_frame(self):
+		self.codename_button = Button(self.frame, text = ">", command = self.new_codename, state = "disabled")
+		self.codename_button.pack(side = "right")
+		
+		self.codename_entry = Entry(self.frame)
+		self.codename_entry.pack(side = "right")
+		
+		self.codename_label = Label(self.frame, text="Codename:")
+		self.codename_label.pack(side = "right")
+
+
 	def __init__(self, team, playernum):
 	
 		self.PlayerID = None
 		self.Codename = None
-		self.team_to_use = team
-		container_to_use =  team.container
+		self.team = team
+		self.playernum = playernum
 		
-		self.frame = Frame(container_to_use, relief="sunken", borderwidth=2)
-		self.frame.pack(side = "top")
-		
-		self.P1 = Label(self.frame, text=playernum)
-		self.P1.pack(side = "left")
-		
-		self.L1 = Label(self.frame, text="Player ID:")
-		self.L1.pack(side = "left")
-		
-		self.E1 = Entry(self.frame)
-		self.E1.pack(side = "left")
-		
-		self.B1 = Button(self.frame, text = ">", command = self.getPlayer)
-		self.B1.pack(side = "left")
-		
-		self.B2 = Button(self.frame, text = ">", command = self.newCodename, state = "disabled")
-		self.B2.pack(side = "right")
-		
-		self.E2 = Entry(self.frame)
-		self.E2.pack(side = "right")
-		
-		self.L2 = Label(self.frame, text="Codename:")
-		self.L2.pack(side = "right")
+		#TODO: Split up further
+		self.__set_frame()
 
+		self.__set_id_frame()
+		self.__set_codename_frame()
+
+
+	def __disable_id_entry(self):
+		self.id_entry.config(state = "disabled")
+		self.id_button.config(state = "disabled")
+		
+		self.codename_button.config(state = "active")
+
+	def __disable_codename_entry(self):
+		#Disable entering a codename, as this is fetched from database
+		self.codename_entry.insert(0, self.Codename)
+			
+		self.codename_entry.config(state = "disabled")
+		self.codename_button.config(state = "disabled")
 	
-	def getPlayer(self):
+	def get_player(self):
 	
-		self.PlayerID = self.E1.get()
-		
-		#Disable the playerID entry box
-		self.E1.config(state = "disabled")
-		self.B1.config(state = "disabled")
-		
-		self.B2.config(state = "active")
-		
+		self.PlayerID = self.id_entry.get()
+		self.__disable_id_entry()
+
 		#If player already exists in database, get the codename
 		#If the player does not exist, player ID is added to the database 
-		if(database.getPlayerID(self.PlayerID)):
-			
-			#Disable the entry and button, add the codename into the entry
-			self.Codename = database.getCodename(self.PlayerID)
-			
-			#Disable entering a codename, as this is fetched from database
-			self.E2.insert(0, self.Codename)
-			
-			self.E2.config(state = "disabled")
-			self.B2.config(state = "disabled")
+		if(database.check_player(self.PlayerID)):
 
+			self.Codename = database.get_codename(self.PlayerID)
+			self.__disable_codename_entry()
 			print(self.Codename)
-			Player_action_screen.add_active_player(Player_action_screen ,self.team_to_use, self.Codename)
 
-	def newCodename(self):
-		self.Codename = self.E2.get()
-		self.E2.config(state = "disabled")
+			Player_action_screen.add_active_player(Player_action_screen ,self.team, self.Codename)
+		else:
+			database.insert_id(self.PlayerID)
+
+	def new_codename(self):
+		self.Codename = self.codename_entry.get()
+		self.codename_entry.config(state = "disabled")
 		#Update the codename of the corresponding id in the database
-		database.insertCodename(self.PlayerID, self.Codename)
-		Player_action_screen.add_active_player(Player_action_screen ,self.team_to_use, self.Codename)
+		database.insert_codename(self.PlayerID, self.Codename)
+		Player_action_screen.add_active_player(Player_action_screen ,self.team, self.Codename)
 
 	
 
 
 
 class GUI:
-	player_entry_root = tk.Tk()
+	player_entry_root = None
 	
 	def __init__(self):
 		self.splash_screen_image = None
 		self.splash_screen_address = "../assets/logo.jpg"
-		self.player_entry_root.bind("<KeyPress>", self.startGameShortcut)
 
 	def set_splash_screen_image(self):
 		# Opens and resizes the image.
@@ -209,14 +237,16 @@ class GUI:
 		label_splash_screen = tk.Label(image=self.splash_screen_image)
 		label_splash_screen.grid(column=0, row=0)
 
-	def player_entry_window(self):
-		# destroying splash screen
-		root.destroy()
 
-		# creating player_entry screen
-		self.player_entry_root.title(config.SCREEN_NAME_PLAYER)
-		self.player_entry_root.geometry("900x800")
+	def startGameShortcut(self, event):
+		if event.keysym == "F5" and event.state == 0:
+			GUI.player_entry_root.destroy()
+			CountdownScreen()
+		elif event.keysym == "F5":
+			GUI.player_entry_root.destroy()
+			CountdownScreen()
 
+	def create_teams(self):
 		# Create team object for each team.
 		red_team = Team("Red")
 		green_team = Team("Green")
@@ -226,16 +256,20 @@ class GUI:
 			playerEntry(red_team, x+1)
 			playerEntry(green_team, x+1)
 
-		play_button = Button(self.player_entry_root, relief = "sunken", borderwidth=2, text="Lock in Teams", command = lambda: CountdownScreen()
-)
+	def player_entry_window(self):
+		# destroying splash screen
+		root.destroy()
+
+		# creating player_entry screen
+		GUI.player_entry_root = tk.Tk()
+		GUI.player_entry_root.bind("<KeyPress>", self.startGameShortcut)
+		GUI.player_entry_root.title(config.SCREEN_NAME_PLAYER)
+		GUI.player_entry_root.geometry("900x800")
+
+		self.create_teams()
+
+		play_button = Button(GUI.player_entry_root, relief = "sunken", borderwidth=2, text="Lock in Teams", command = lambda: CountdownScreen())
 		play_button.pack(side="bottom", pady= 0, padx= 0)
 
-	def startGameShortcut(self, event):
-		if event.keysym == "F5" and event.state == 0:
-			self.player_entry_root.destroy()
-			CountdownScreen()
-		elif event.keysym == "F5":
-			self.player_entry_root.destroy()
-			CountdownScreen()
-			
-		
+
+

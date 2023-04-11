@@ -251,8 +251,8 @@ class GUI:
 		red_team = Team("Red")
 		green_team = Team("Green")
 
-		#create 19 players for each team
-		for x in range(19):
+		#create 15 players for each team
+		for x in range(15):
 			playerEntry(red_team, x+1)
 			playerEntry(green_team, x+1)
 

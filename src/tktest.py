@@ -268,8 +268,5 @@ class GUI:
 
 		self.create_teams()
 
-		play_button = Button(GUI.player_entry_root, relief = "sunken", borderwidth=2, text="Lock in Teams", command = lambda: CountdownScreen())
-		play_button.pack(side="bottom", pady= 0, padx= 0)
-
 
 

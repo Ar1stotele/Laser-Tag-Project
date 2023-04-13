@@ -4,14 +4,37 @@ import tkinter as tk
 from tkinter import *
 from PIL import ImageTk, Image
 import constants as config
+#import pygame
 
 ##TkInter's instance 
 root = tk.Tk()
 
 
 
+# class musicplayer
+	## def __init__(self):
+		##pygame.mixer.music
+	#def _play(self):
+		#pygame.mixer.music.load("./audio/music1.mp3")
+	#def _check_song_end()
+	#def _randomly_pick_next_song
+	#def _update()
+		#called in main loop
+		#if check_song_end
+			#_randomly_pick_next_song()
+
+class Player:
+	def __init__(self, PlayerID, codename):
+		self.PlayerID = PlayerID
+		self.codename = codename
+		self.score = 0
+	
+	def get_id(self):
+		return self.PlayerID
+
 
 class Team:
+	
 	def __init__(self, team_color):
 		self.container = Frame(GUI.player_entry_root, relief="sunken", borderwidth=2)
 		self.container.pack(side="left", fill="x")
@@ -53,8 +76,8 @@ class Player_action_screen:
 	left_frame = None
 	right_frame = None
 
-	red_dict = {}
-	green_dict = {}
+	red_team = [] #TODO: change name. not a dict anymore.
+	green_team = []
 
 	def __init__(self):
 		pass
@@ -100,35 +123,34 @@ class Player_action_screen:
 		self.set_left_frame()
 		self.set_right_frame()
 		
-		for x in self.red_dict:
-			red_label = Label(Player_action_screen.left_frame, text = x)
+		for x in self.red_team:
+			codename = getattr(x, "codename")
+			red_label = Label(Player_action_screen.left_frame, text = codename)
 			red_label.pack()
-		for y in self.green_dict:
-			green_label = Label(Player_action_screen.right_frame, text = y)
+		for x in self.green_team:
+			codename = getattr(x, "codename")
+			green_label = Label(Player_action_screen.right_frame, text = codename)
 			green_label.pack()
 
 		self.countdown(360)
 
-	def add_active_player (self, team, codename):
+	def add_active_player (self, team, id, codename):
+		player_to_add = Player(id, codename)
 		if team.color == "Red":
-			self.red_dict[codename] = 0
+			self.red_team.append(player_to_add)
 		elif team.color == "Green":
-			self.green_dict[codename] = 0
+			self.green_team.append(player_to_add)
 
 
 
 #Creates a single player entry box
 class playerEntry:
 
-
-
 	def __set_frame(self):
-		#TODO: make priv variables
 		pass
 		self.frame = Frame(self.team.container, relief="sunken", borderwidth=2)
 		self.frame.pack(side = "top")
 		
-		#def create prompt labels
 		p_num_label = Label(self.frame, text=self.playernum)
 		p_num_label.pack(side = "left")
 
@@ -160,7 +182,6 @@ class playerEntry:
 		self.team = team
 		self.playernum = playernum
 		
-		#TODO: Split up further
 		self.__set_frame()
 
 		self.__set_id_frame()
@@ -193,7 +214,7 @@ class playerEntry:
 			self.__disable_codename_entry()
 			print(self.Codename)
 
-			Player_action_screen.add_active_player(Player_action_screen ,self.team, self.Codename)
+			Player_action_screen.add_active_player(Player_action_screen ,self.team, self.PlayerID, self.Codename)
 		else:
 			database.insert_id(self.PlayerID)
 
@@ -202,7 +223,7 @@ class playerEntry:
 		self.codename_entry.config(state = "disabled")
 		#Update the codename of the corresponding id in the database
 		database.insert_codename(self.PlayerID, self.Codename)
-		Player_action_screen.add_active_player(Player_action_screen ,self.team, self.Codename)
+		Player_action_screen.add_active_player(Player_action_screen ,self.team, self.PlayerID, self.Codename)
 
 	
 
@@ -267,9 +288,6 @@ class GUI:
 		GUI.player_entry_root.geometry("900x800")
 
 		self.create_teams()
-
-		play_button = Button(GUI.player_entry_root, relief = "sunken", borderwidth=2, text="Lock in Teams", command = lambda: CountdownScreen())
-		play_button.pack(side="bottom", pady= 0, padx= 0)
 
 
 

@@ -184,7 +184,7 @@ class Player_action_screen:
 		
 		
 		self.updateScores("123:123")
-		
+
 		##This is what we need to implement, something like this
 		#while(self.gameEnd != True):
 			##if message recieved, update scores
@@ -226,18 +226,28 @@ class Player_action_screen:
 						Player_action_screen.greenScore += 10
 						#updates score and score label
 						x.score_label["text"] = x.score
-						self.green_team_score["text"] = Player_action_screen.greenScore
-			
+						self.green_team_score["text"] = Player_action_screen.greenScore	
+		self.flash()
+
+	def flash(self):
+		self.red_team_score["text"] = Player_action_screen.redScore
+		self.green_team_score["text"] = Player_action_screen.greenScore	
+
+		# while(self.gameEnd != True):
+		if (self.redScore >= self.greenScore):
+				bg = self.red_team_score.cget("background")
+				fg = self.red_team_score.cget("foreground")
+				self.red_team_score.configure(background=fg, foreground=bg)
+
+		if (self.greenScore >= self.redScore):
+				bg = self.green_team_score.cget("background")
+				fg = self.green_team_score.cget("foreground")
+				self.green_team_score.configure(background=fg, foreground=bg)
+        
+		root.after(250, self.flash)	
 		
 		
-		
-		
-		
-		
-		
-		
-		
-		
+
 
 
 

@@ -28,6 +28,7 @@ class Player:
 		self.PlayerID = PlayerID
 		self.codename = codename
 		self.score = 0
+		
 	
 	def get_id(self):
 		return self.PlayerID
@@ -63,7 +64,7 @@ class CountdownScreen:
 			self.timer_image = ImageTk.PhotoImage(timer_image_resized)
 			label_timer_screen = tk.Label(image=self.timer_image)
 			label_timer_screen.place(x=0, y=0)
-			self.master.after(1000, self.start_countdown)
+			self.master.after(10, self.start_countdown)
 		else:
 			self.master.destroy()
 			Player_action_screen().new_window()
@@ -75,8 +76,15 @@ class Player_action_screen:
 	
 	left_frame = None
 	right_frame = None
+	
+	greenScore = 0
+	redScore = 0
+	
+	
+	
+	
 
-	red_team = [] #TODO: change name. not a dict anymore.
+	red_team = [] 
 	green_team = []
 
 	def __init__(self):
@@ -98,14 +106,31 @@ class Player_action_screen:
 	def set_left_frame(self):
 		Player_action_screen.left_frame = Frame(self.big_frame,relief="sunken", borderwidth=2)
 		Player_action_screen.left_frame.pack(side = "left", padx = 40)
+		
 		red_team = Label(Player_action_screen.left_frame, text = "Red Team", bg = "red")
-		red_team.pack() 
+		self.red_team_score = Label(Player_action_screen.left_frame, text = "0")
+		
+		red_team.pack(side = "top")
+		self.red_team_score.pack(side = "top")
+		
+		Player_action_screen.leftPlayerFrame = Frame(Player_action_screen.left_frame, relief = "sunken", borderwidth=2)
+		Player_action_screen.leftPlayerFrame.pack(side = "bottom")
+		
+		
+		
 
 	def set_right_frame(self):
 		Player_action_screen.right_frame = Frame(self.big_frame,relief="sunken", borderwidth=2)
 		Player_action_screen.right_frame.pack(side = "right", padx = 40)
+		
 		green_team = Label(Player_action_screen.right_frame, text = "Green Team", bg = "green")
-		green_team.pack()
+		self.green_team_score = Label(Player_action_screen.right_frame, text = "0")
+		
+		green_team.pack(side = "top")
+		self.green_team_score.pack(side = "top")
+		
+		Player_action_screen.rightPlayerFrame = Frame(Player_action_screen.right_frame, relief = "sunken", borderwidth = 2)
+		Player_action_screen.rightPlayerFrame.pack(side = "bottom")
 
 	def countdown(self, count):
 		Player_action_screen.timer_label['text'] = f'Time left: {count} seconds'	
@@ -125,14 +150,47 @@ class Player_action_screen:
 		
 		for x in self.red_team:
 			codename = getattr(x, "codename")
-			red_label = Label(Player_action_screen.left_frame, text = codename)
-			red_label.pack()
+			
+			
+			#Organizes the players within the PlayerFrame from top to bottom
+			frame = Frame(Player_action_screen.leftPlayerFrame, borderwidth = 2)
+			frame.pack()
+			
+			#Associates the player codename label and score label with a player object
+			x.codename_label = Label(frame, text = codename)
+			x.codename_label.pack(side = "left")
+			
+			x.score_label = Label(frame, text = "0")
+			x.score_label.pack(side = "right")
+			
+			
 		for x in self.green_team:
 			codename = getattr(x, "codename")
-			green_label = Label(Player_action_screen.right_frame, text = codename)
-			green_label.pack()
-
+			
+			#Organizes the players within the PlayerFrame from top to bottom
+			frame = Frame(Player_action_screen.rightPlayerFrame, borderwidth = 2)
+			frame.pack()
+			
+			
+			x.codename_label = Label(frame, text = codename)
+			x.codename_label.pack(side = "left")
+			
+			x.score_label = Label(frame, text = x.score)
+			x.score_label.pack(side = "right")
+			
+		
 		self.countdown(360)
+		self.gameEnd = False;
+		
+		
+		self.updateScores("123:123")
+		
+		##This is what we need to implement, something like this
+		#while(self.gameEnd != True):
+			##if message recieved, update scores
+			#pass
+		
+		
 
 	def add_active_player (self, team, id, codename):
 		player_to_add = Player(id, codename)
@@ -140,6 +198,46 @@ class Player_action_screen:
 			self.red_team.append(player_to_add)
 		elif team.color == "Green":
 			self.green_team.append(player_to_add)
+			
+	def updateScores(self, udpMessage):
+		
+		#Gets both the player Ids in the message and puts them in a list
+		actions = udpMessage.split(":");
+
+		for x in self.red_team:
+			#Checks to see which player got a hit
+			if (x.PlayerID == actions[0]):
+			#Checks to make sure the hit player was a green player
+				for y in self.green_team:
+					if(y.PlayerID == actions[1]):
+						x.score += 10
+						Player_action_screen.redScore += 10
+						#updates score and score label
+						x.score_label["text"] = x.score
+						self.red_team_score["text"] = Player_action_screen.redScore
+			
+		for x in self.green_team:
+			#Checks to see which player got a hit
+			if (x.PlayerID == actions[0]):
+			#Checks to make sure the hit player was a red player
+				for y in self.red_team:
+					if(y.PlayerID == actions[1]):
+						x.score += 10
+						Player_action_screen.greenScore += 10
+						#updates score and score label
+						x.score_label["text"] = x.score
+						self.green_team_score["text"] = Player_action_screen.greenScore
+			
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
 
 
 

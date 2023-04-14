@@ -8,6 +8,11 @@ How to run
 	- go to directory /src
 	- Run the following command "python "main.py"" to run the program.
 
+How to run Simulation:
+	- Do all steps from `How to run`.
+	- Enter two user credentials for both teams.
+	- Once the game is loaded - run the following command `python "trafficgenerator.py"`, from /src directory and enter codename's of all of the users according to the team colors.
+
 Requirements for software:
 	- Needs to interface with a postgresql database
 	- Can use more than one window

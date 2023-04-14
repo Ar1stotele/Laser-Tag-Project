@@ -86,7 +86,7 @@ class Player_action_screen:
 
     red_team = []
     green_team = []
-    game_time = 20
+    game_time = 360
 
     def __init__(self):
         self.sock = socket.socket(socket.AF_INET,  # Internet

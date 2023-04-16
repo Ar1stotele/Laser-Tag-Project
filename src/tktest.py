@@ -223,6 +223,19 @@ class Player_action_screen:
 			self.red_team.append(player_to_add)
 		elif team.color == "Green":
 			self.green_team.append(player_to_add)
+
+		
+	def get_red_score(self):
+		if Player_action_screen.redScore > Player_action_screen.greenScore:
+			return "**" + str(Player_action_screen.redScore) + "**" #To show they're in the lead
+		else:
+			return str(Player_action_screen.redScore)
+	
+	def get_green_score(self):
+		if Player_action_screen.greenScore > Player_action_screen.redScore:
+			return "**" + str(Player_action_screen.greenScore) + "**" #To show they're in the lead
+		else:
+			return str(Player_action_screen.greenScore)
 			
 	def updateScores(self, udpMessage):
 		
@@ -239,7 +252,7 @@ class Player_action_screen:
 						Player_action_screen.redScore += 10
 						#updates score and score label
 						x.score_label["text"] = x.score
-						self.red_team_score["text"] = Player_action_screen.redScore
+						self.red_team_score["text"] = self.get_red_score()
 			
 		for x in self.green_team:
 			#Checks to see which player got a hit
@@ -251,7 +264,7 @@ class Player_action_screen:
 						Player_action_screen.greenScore += 10
 						#updates score and score label
 						x.score_label["text"] = x.score
-						self.green_team_score["text"] = Player_action_screen.greenScore
+						self.green_team_score["text"] = self.get_green_score()
 			
 
 

@@ -51,7 +51,7 @@ class CountdownScreen:
 		self.master = tk.Tk()
 		self.master.title = "Loading.."
 		self.master.geometry("900x800")
-		self.count = 30
+		self.count = 1
 		self.timer_image_open = None
 		self.timer_image_address = ""
 		self.start_countdown()
@@ -154,7 +154,7 @@ class Player_action_screen:
 			data, addr = self.sock.recvfrom(1024)  # buffer size is 1024 bytes
 			decodedData = data.decode('utf-8')
 			print("decodedData: " + decodedData)
-			self.updateScores(data.decode('utf-8'))
+			self.updateScores(decodedData)
 
 	def runUdpServer(self):
 		t = threading.Thread(target=self.receive_data, args=())
@@ -206,9 +206,8 @@ class Player_action_screen:
 		
 		self.countdown()
 		self.gameEnd = False
+		self.runUdpServer()
 		
-		
-		self.updateScores("123:123")
 		
 		##This is what we need to implement, something like this
 		#while(self.gameEnd != True):

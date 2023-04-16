@@ -83,7 +83,7 @@ class Player_action_screen:
 	left_frame = None
 	right_frame = None
 
-	greenScore = 0
+	greenScore = 2
 	redScore = 0
 
 	red_team = []
@@ -299,7 +299,25 @@ class Player_action_screen:
 						#updates score and score label
 						x.score_label["text"] = x.score
 						self.green_team_score["text"] = self.get_green_score()
+						
+		self.flash()
 			
+	def flash(self):
+		self.red_team_score["text"] = Player_action_screen.redScore
+		self.green_team_score["text"] = Player_action_screen.greenScore 
+
+        # while(self.gameEnd != True):
+		if (self.redScore >= self.greenScore):
+			bg = self.red_team_score.cget("background")
+			fg = self.red_team_score.cget("foreground")
+			self.red_team_score.configure(background=fg, foreground=bg)
+			
+		if (self.greenScore >= self.redScore):
+			bg = self.green_team_score.cget("background")
+			fg = self.green_team_score.cget("foreground")
+			self.green_team_score.configure(background=fg, foreground=bg)
+
+		root.after(250, self.flash) 
 
 
 

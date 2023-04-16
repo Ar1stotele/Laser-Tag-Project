@@ -118,7 +118,7 @@ class Player_action_screen:
 		# Makes the actual window
 		Player_action_screen.play_action = tk.Tk()
 		Player_action_screen.play_action.title("Play Action")
-		Player_action_screen.play_action.geometry("400x400")
+		Player_action_screen.play_action.geometry("600x600")
 		Player_action_screen.play_action.bind("<KeyPress>", self.f1Key)
 
 		timer_frame = Frame(Player_action_screen.play_action,

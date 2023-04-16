@@ -53,7 +53,7 @@ class CountdownScreen:
 		self.master = tk.Tk()
 		self.master.title = "Loading.."
 		self.master.geometry("900x800")
-		self.count = 30
+		self.count = 1
 		self.timer_image_open = None
 		self.timer_image_address = ""
 		self.start_countdown()
@@ -156,7 +156,7 @@ class Player_action_screen:
 			data, addr = self.sock.recvfrom(1024)  # buffer size is 1024 bytes
 			decodedData = data.decode('utf-8')
 			print("decodedData: " + decodedData)
-			self.updateScores(data.decode('utf-8'))
+			self.updateScores(decodedData)
 
 	def runUdpServer(self):
 		t = threading.Thread(target=self.receive_data, args=())
@@ -208,9 +208,8 @@ class Player_action_screen:
 		
 		self.countdown()
 		self.gameEnd = False
+		self.runUdpServer()
 		
-		
-		self.updateScores("123:123")
 		
 		##This is what we need to implement, something like this
 		#while(self.gameEnd != True):
@@ -225,6 +224,19 @@ class Player_action_screen:
 			self.red_team.append(player_to_add)
 		elif team.color == "Green":
 			self.green_team.append(player_to_add)
+
+		
+	def get_red_score(self):
+		if Player_action_screen.redScore > Player_action_screen.greenScore:
+			return "**" + str(Player_action_screen.redScore) + "**" #To show they're in the lead
+		else:
+			return str(Player_action_screen.redScore)
+	
+	def get_green_score(self):
+		if Player_action_screen.greenScore > Player_action_screen.redScore:
+			return "**" + str(Player_action_screen.greenScore) + "**" #To show they're in the lead
+		else:
+			return str(Player_action_screen.greenScore)
 			
 	def updateScores(self, udpMessage):
 		
@@ -241,7 +253,7 @@ class Player_action_screen:
 						Player_action_screen.redScore += 10
 						#updates score and score label
 						x.score_label["text"] = x.score
-						self.red_team_score["text"] = Player_action_screen.redScore
+						self.red_team_score["text"] = self.get_red_score()
 			
 		for x in self.green_team:
 			#Checks to see which player got a hit
@@ -253,7 +265,7 @@ class Player_action_screen:
 						Player_action_screen.greenScore += 10
 						#updates score and score label
 						x.score_label["text"] = x.score
-						self.green_team_score["text"] = Player_action_screen.greenScore
+						self.green_team_score["text"] = self.get_green_score()
 			
 
 

@@ -5,7 +5,8 @@ from mttkinter import mtTkinter as tk
 import database
 import tkinter as tk
 from tkinter import *
-import pygame
+from pygame import mixer
+import random
 
 from PIL import ImageTk, Image
 import constants as config
@@ -15,29 +16,14 @@ root = tk.Tk()
 
 class MusicPlayer:
 	def __init__(self):
-		#self.master = master
-		pygame.init
+		mixer.init()
 
-	def _next_song(self):
-		print("Yeep!")
-
-	def update(self):
-		if pygame.mixer.get_busy == False:
-			pass
-			#self.master.after(1000, self._next_song)
-		else:
-			pass
-			
-# def __init__(self):
-# pygame.mixer.music
-# def _play(self):
-# pygame.mixer.music.load("./audio/music1.mp3")
-# def _check_song_end()
-# def _randomly_pick_next_song
-# def _update()
-# called in main loop
-# if check_song_end
-# _randomly_pick_next_song()
+	def random_song(self):
+		random_track = random.randrange(1,9)
+		song_play = f"../audio/Track0{random_track}.mp3"
+		mixer.music.set_volume(0.5)
+		mixer.music.load(song_play)
+		mixer.music.play()
 
 
 class Player:
@@ -80,7 +66,7 @@ class CountdownScreen:
 			self.timer_image = ImageTk.PhotoImage(timer_image_resized)
 			label_timer_screen = tk.Label(image=self.timer_image)
 			label_timer_screen.place(x=0, y=0)
-			self.master.after(10, self.start_countdown)
+			self.master.after(1000, self.start_countdown)
 		else:
 			self.master.destroy()
 			Player_action_screen().new_window()
@@ -104,6 +90,7 @@ class Player_action_screen:
 		self.sock = socket.socket(socket.AF_INET,  # Internet
 								  socket.SOCK_DGRAM)  # UDP
 		self.sock.bind((config.SERVER_IP, int(config.PORT)))
+		self.music = MusicPlayer()
 
 	def initialize_window(self):
 		# Makes the actual window
@@ -151,8 +138,8 @@ class Player_action_screen:
 			Player_action_screen.right_frame, relief="sunken", borderwidth=2)
 		Player_action_screen.rightPlayerFrame.pack(side="bottom")
 
-
 	def countdown(self):
+
 		if self.game_time == 0:
 			Player_action_screen.timer_label['text'] = "Game is over"
 		else:
@@ -183,6 +170,8 @@ class Player_action_screen:
 
 		self.set_left_frame()
 		self.set_right_frame()
+
+		self.music.random_song()
 		
 		for x in self.red_team:
 			codename = getattr(x, "codename")

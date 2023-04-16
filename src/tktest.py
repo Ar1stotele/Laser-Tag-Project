@@ -19,7 +19,9 @@ class MusicPlayer:
 		mixer.init()
 
 	def random_song(self):
+		random.seed()
 		random_track = random.randrange(1,9)
+		print(random_track)
 		song_play = f"../audio/Track0{random_track}.mp3"
 		mixer.music.set_volume(0.5)
 		mixer.music.load(song_play)

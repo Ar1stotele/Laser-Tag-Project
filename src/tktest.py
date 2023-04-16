@@ -4,6 +4,8 @@ import threading
 from mttkinter import mtTkinter as tk
 import database
 import tkinter as tk
+from tkinter import ttk
+from tkinter import scrolledtext
 from tkinter import *
 from pygame import mixer
 import random
@@ -122,9 +124,18 @@ class Player_action_screen:
 		timer_frame = Frame(Player_action_screen.play_action,
 							relief="sunken", borderwidth=2)
 		timer_frame.pack(side="top", pady=40)
-
+		
+		self.text_area = scrolledtext.ScrolledText(timer_frame, 
+                                      wrap = tk.WORD, 
+                                      width = 20, 
+                                      height = 5, 
+                                      font = ("Times New Roman",
+                                              15))
+		
+		
 		Player_action_screen.timer_label = Label(timer_frame)
 		Player_action_screen.timer_label.pack()
+		self.text_area.pack()
 
 	def set_left_frame(self):
 		Player_action_screen.left_frame = Frame(
@@ -187,7 +198,7 @@ class Player_action_screen:
 
 		self.big_frame = Frame(
 			Player_action_screen.play_action, relief="sunken", borderwidth=2)
-		self.big_frame.pack(side="bottom", pady=50)
+		self.big_frame.pack(side="top", pady=50)
 
 		self.set_left_frame()
 		self.set_right_frame()
@@ -266,6 +277,9 @@ class Player_action_screen:
 				for y in self.green_team:
 					if(y.PlayerID == actions[1]):
 						x.score += 10
+						string = x.codename + " hit " + y.codename + "\n"
+						self.text_area.insert(tk.INSERT, string)
+						self.text_area.see(tk.END)
 						Player_action_screen.redScore += 10
 						#updates score and score label
 						x.score_label["text"] = x.score
@@ -277,6 +291,9 @@ class Player_action_screen:
 			#Checks to make sure the hit player was a red player
 				for y in self.red_team:
 					if(y.PlayerID == actions[1]):
+						string = x.codename + " hit " + y.codename + "\n"
+						self.text_area.insert(tk.INSERT, string)
+						self.text_area.see(tk.END)
 						x.score += 10
 						Player_action_screen.greenScore += 10
 						#updates score and score label

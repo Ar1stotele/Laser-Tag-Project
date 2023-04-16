@@ -93,12 +93,31 @@ class Player_action_screen:
 								  socket.SOCK_DGRAM)  # UDP
 		self.sock.bind((config.SERVER_IP, int(config.PORT)))
 		self.music = MusicPlayer()
+	
+	def f1Key(self, event):
+		if event.keysym == "F1" and event.state == 0:
+			self.sock.close()
+			Player_action_screen.red_team.clear()
+			Player_action_screen.green_team.clear()
+			Player_action_screen.play_action.destroy()
+			screen = GUI()
+			screen.new_player_entry_window()
+			
+		elif event.keysym == "F1":
+			self.sock.close()
+			Player_action_screen.red_team.clear()
+			Player_action_screen.green_team.clear()
+			Player_action_screen.play_action.destroy()
+			screen = GUI()
+			screen.new_player_entry_window()
+			
 
 	def initialize_window(self):
 		# Makes the actual window
 		Player_action_screen.play_action = tk.Tk()
 		Player_action_screen.play_action.title("Play Action")
 		Player_action_screen.play_action.geometry("400x400")
+		Player_action_screen.play_action.bind("<KeyPress>", self.f1Key)
 
 		timer_frame = Frame(Player_action_screen.play_action,
 							relief="sunken", borderwidth=2)
@@ -211,10 +230,7 @@ class Player_action_screen:
 		self.runUdpServer()
 		
 		
-		##This is what we need to implement, something like this
-		#while(self.gameEnd != True):
-			##if message recieved, update scores
-			#pass
+		
 		
 		
 
@@ -406,6 +422,16 @@ class GUI:
 	def player_entry_window(self):
 		# destroying splash screen
 		root.destroy()
+
+		# creating player_entry screen
+		GUI.player_entry_root = tk.Tk()
+		GUI.player_entry_root.bind("<KeyPress>", self.startGameShortcut)
+		GUI.player_entry_root.title(config.SCREEN_NAME_PLAYER)
+		GUI.player_entry_root.geometry("900x800")
+
+		self.create_teams()
+		
+	def new_player_entry_window(self):
 
 		# creating player_entry screen
 		GUI.player_entry_root = tk.Tk()

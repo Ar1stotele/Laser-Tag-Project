@@ -83,7 +83,7 @@ class Player_action_screen:
 	left_frame = None
 	right_frame = None
 
-	greenScore = 2
+	greenScore = 0
 	redScore = 0
 
 	red_team = []
@@ -172,6 +172,8 @@ class Player_action_screen:
 
 	def countdown(self):
 
+		self.flash()
+
 		if self.game_time == 0:
 			Player_action_screen.timer_label['text'] = "Game is over"
 		else:
@@ -180,6 +182,7 @@ class Player_action_screen:
 		if self.game_time >= 0:
 			Player_action_screen.timer_label.after(1000, self.countdown)
 
+		
 
 	def receive_data(self):
 		while self.game_time > 0:
@@ -284,7 +287,8 @@ class Player_action_screen:
 						#updates score and score label
 						x.score_label["text"] = x.score
 						self.red_team_score["text"] = self.get_red_score()
-			
+
+	
 		for x in self.green_team:
 			#Checks to see which player got a hit
 			if (x.PlayerID == actions[0]):
@@ -299,10 +303,10 @@ class Player_action_screen:
 						#updates score and score label
 						x.score_label["text"] = x.score
 						self.green_team_score["text"] = self.get_green_score()
-						
-		self.flash()
+						print("here")
 			
 	def flash(self):
+
 		self.red_team_score["text"] = Player_action_screen.redScore
 		self.green_team_score["text"] = Player_action_screen.greenScore 
 
@@ -317,7 +321,7 @@ class Player_action_screen:
 			fg = self.green_team_score.cget("foreground")
 			self.green_team_score.configure(background=fg, foreground=bg)
 
-		root.after(250, self.flash) 
+		#root.after(250, self.flash) 
 
 
 

@@ -337,35 +337,52 @@ class Player_action_screen:
 	#flash the highest team score and player score from each team		
 	def flash(self):
 
+		self.flashCount = 0
+
 		self.red_team_score["text"] = Player_action_screen.redScore
 		self.green_team_score["text"] = Player_action_screen.greenScore 
 
     
-		if (self.redScore >= self.greenScore):
+		if (self.redScore > self.greenScore or self.flashCount == 1):
 			bg = self.red_team_score.cget("background")
 			fg = self.red_team_score.cget("foreground")
 			self.red_team_score.configure(background=fg, foreground=bg)
+			if (self.flashCount == 1):
+				self.flashCount = 0
+			else:
+				self.flashCount = 1
 			
-		if (self.greenScore >= self.redScore):
+		elif (self.greenScore > self.redScore or self.flashCount == 2):
 			bg = self.green_team_score.cget("background")
 			fg = self.green_team_score.cget("foreground")
 			self.green_team_score.configure(background=fg, foreground=bg)
+			if (self.flashCount == 2):
+				self.flashCount = 0
+			else:
+				self.flashCount = 2
 
 		self.r = self.max_red_score()
-		if (self.r != None):
+		if (self.r != None) or (self.flashCount == 3):
 			bgr = self.r.score_label.cget("background")
 			fgr = self.r.score_label.cget("foreground")
 			self.r.score_label.configure(background=fgr, foreground=bgr)
+			if (self.flashCount == 3):
+				self.flashCount = 0
+			else:
+				self.flashCount = 3
 
 		self.g = self.max_green_score()
-		if (self.g != None):
+		if (self.g != None) or (self.flashCount == 4 ):
 			bgg = self.g.score_label.cget("background")
 			fgg = self.g.score_label.cget("foreground")
 			self.g.score_label.configure(background=fgg, foreground=bgg)
+			if (self.flashCount == 4):
+				self.flashCount = 0
+			else:
+				self.flashCount = 4
 
-
-
-		#root.after(250, self.flash) 
+		# if (self.flashCount > 0):
+		# 	root.after(250, self.flash) 
 
 
 

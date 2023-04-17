@@ -172,6 +172,9 @@ class Player_action_screen:
 
 	def countdown(self):
 
+		self.flash()
+		root.after(250, self.flash)
+
 		if self.game_time == 0:
 			Player_action_screen.timer_label['text'] = "Game is over"
 		else:
@@ -180,6 +183,7 @@ class Player_action_screen:
 		if self.game_time >= 0:
 			Player_action_screen.timer_label.after(1000, self.countdown)
 
+		
 
 	def receive_data(self):
 		while self.game_time > 0:
@@ -264,9 +268,38 @@ class Player_action_screen:
 			return "**" + str(Player_action_screen.greenScore) + "**" #To show they're in the lead
 		else:
 			return str(Player_action_screen.greenScore)
-			
-	def updateScores(self, udpMessage):
+
+	def max_red_score(self):
+
+		if(len(self.red_team)==0):
+			return None
 		
+		self.red_max_score = self.red_team[0].score
+		self.max_red_player = self.red_team[0]
+
+		for i in self.red_team:
+			if(i.score>self.red_max_score):
+				self.red_max_score = i.score
+				self.max_red_player = i
+    	
+		return self.max_red_player
+	
+	def max_green_score(self):
+
+		if(len(self.green_team)==0):
+			return None
+		
+		self.green_max_score = self.green_team[0].score
+		self.max_green_player = self.green_team[0]
+
+		for i in self.green_team:
+			if(i.score>self.green_max_score):
+				self.green_max_score = i.score
+				self.max_green_player = i
+    	
+		return self.max_green_player	
+
+	def updateScores(self, udpMessage):
 		#Gets both the player Ids in the message and puts them in a list
 		actions = udpMessage.split(":")
 
@@ -283,8 +316,9 @@ class Player_action_screen:
 						Player_action_screen.redScore += 10
 						#updates score and score label
 						x.score_label["text"] = x.score
-						self.red_team_score["text"] = self.get_red_score()
-			
+						
+
+	
 		for x in self.green_team:
 			#Checks to see which player got a hit
 			if (x.PlayerID == actions[0]):
@@ -298,8 +332,40 @@ class Player_action_screen:
 						Player_action_screen.greenScore += 10
 						#updates score and score label
 						x.score_label["text"] = x.score
-						self.green_team_score["text"] = self.get_green_score()
+					
+
+	#flash the highest team score and player score from each team		
+	def flash(self):
+
+		self.red_team_score["text"] = Player_action_screen.redScore
+		self.green_team_score["text"] = Player_action_screen.greenScore 
+
+    
+		if (self.redScore >= self.greenScore):
+			bg = self.red_team_score.cget("background")
+			fg = self.red_team_score.cget("foreground")
+			self.red_team_score.configure(background=fg, foreground=bg)
 			
+		if (self.greenScore >= self.redScore):
+			bg = self.green_team_score.cget("background")
+			fg = self.green_team_score.cget("foreground")
+			self.green_team_score.configure(background=fg, foreground=bg)
+
+		self.r = self.max_red_score()
+		if (self.r != None):
+			bgr = self.r.score_label.cget("background")
+			fgr = self.r.score_label.cget("foreground")
+			self.r.score_label.configure(background=fgr, foreground=bgr)
+
+		self.g = self.max_green_score()
+		if (self.g != None):
+			bgg = self.g.score_label.cget("background")
+			fgg = self.g.score_label.cget("foreground")
+			self.g.score_label.configure(background=fgg, foreground=bgg)
+
+
+
+		#root.after(250, self.flash) 
 
 
 

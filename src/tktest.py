@@ -180,6 +180,7 @@ class Player_action_screen:
 
 		if self.game_time == 0:
 			Player_action_screen.timer_label['text'] = "Game is over"
+			mixer.music.pause()
 		else:
 			Player_action_screen.timer_label['text'] = f'Time left: {self.game_time} seconds'
 		self.game_time -= 1

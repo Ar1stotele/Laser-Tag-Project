@@ -21,6 +21,7 @@ class MusicPlayer:
 		mixer.init()
 
 	def random_song(self):
+		mixer.music.unpause()
 		random.seed()
 		random_track = random.randrange(1,9)
 		print(random_track)
@@ -55,7 +56,7 @@ class CountdownScreen:
 		self.master = tk.Tk()
 		self.master.title = "Loading.."
 		self.master.geometry("900x800")
-		self.count = 1
+		self.count = 30
 		self.timer_image_open = None
 		self.timer_image_address = ""
 		self.start_countdown()
@@ -99,6 +100,7 @@ class Player_action_screen:
 	def f1Key(self, event):
 		if event.keysym == "F1" and event.state == 0:
 			self.sock.close()
+			mixer.music.pause()
 			Player_action_screen.red_team.clear()
 			Player_action_screen.green_team.clear()
 			Player_action_screen.play_action.destroy()
@@ -107,6 +109,7 @@ class Player_action_screen:
 			
 		elif event.keysym == "F1":
 			self.sock.close()
+			mixer.music.pause()
 			Player_action_screen.red_team.clear()
 			Player_action_screen.green_team.clear()
 			Player_action_screen.play_action.destroy()
